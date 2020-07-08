@@ -1,2 +1,2 @@
-const char* ssid = "your-ssid";
-const char* password = "your-password";
+const char *ssid [2] = { "first-ssid", "another-ssid" };
+const char *password [2] = { "first-password", "password-for-another-ssid" };

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
 #include <WiFiUdp.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -8,6 +9,7 @@
 #include <TimeLib.h>
 #include "wifi_settings.h"
 
+ESP8266WiFiMulti wifiMulti;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "jp.pool.ntp.org", 3600 * 9, 3600000);
 MLED matrix(0);
@@ -25,18 +27,20 @@ const int monthY = 7;
 const int monthBits = 4;
 
 void setupWifi() {
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
   ESP.eraseConfig();
-  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
 
-  while (WiFi.status() != WL_CONNECTED) {
+  for (int i = 0; i < 2; i++) {
+    wifiMulti.addAP(ssid[i], password[i]);
+  }
+
+  while (wifiMulti.run() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
   Serial.println("");
-  Serial.println("WiFi connected");
+  Serial.print("WiFi connected to ");
+  Serial.println(WiFi.SSID().c_str());
 }
 
 void setupClock() {
