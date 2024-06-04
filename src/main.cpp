@@ -14,7 +14,7 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "jp.pool.ntp.org", 3600 * 9, 3600000);
 MLED matrix(0);
 
-const unsigned char loading [] = { 0x00, 0x54, 0x50, 0x74, 0x54, 0x54, 0x00, 0x00 };
+const unsigned char loading[] = {0x00, 0x54, 0x50, 0x74, 0x54, 0x54, 0x00, 0x00};
 const int hourY = 0;
 const int hourBits = 5;
 const int minuteY = 2;
@@ -26,15 +26,18 @@ const int dayBits = 5;
 const int monthY = 7;
 const int monthBits = 4;
 
-void setupWifi() {
+void setupWifi()
+{
   ESP.eraseConfig();
   Serial.print("Connecting to WiFi");
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 1; i++)
+  {
     wifiMulti.addAP(ssid[i], password[i]);
   }
 
-  while (wifiMulti.run() != WL_CONNECTED) {
+  while (wifiMulti.run() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -43,7 +46,8 @@ void setupWifi() {
   Serial.println(WiFi.SSID().c_str());
 }
 
-void setupClock() {
+void setupClock()
+{
   timeClient.begin();
   timeClient.update();
   Serial.println(timeClient.getFormattedTime());
@@ -63,15 +67,19 @@ void setup()
   setupClock();
 }
 
-void drawTimeUnit(int value, int row, int length) {
-  int binary [6] = {};
-  for (int i = 0; value > 0; i++) {
+void drawTimeUnit(int value, int row, int length)
+{
+  int binary[6] = {};
+  for (int i = 0; value > 0; i++)
+  {
     binary[i] = value % 2;
     value = value / 2;
   }
 
-  for (int i = 0; i < length; i++) {
-    if (binary[i]) {
+  for (int i = 0; i < length; i++)
+  {
+    if (binary[i])
+    {
       matrix.drawPixel(i, row, LED_ON);
     }
   }
